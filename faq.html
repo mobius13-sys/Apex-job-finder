@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX — Frequently Asked Questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2430;
+    --cream:#F7F5F0;
+    --amber:#E3A008;
+    --ink:#14181F;
+    --teal:#3D7068;
+    --red:#B5432A;
+    --line:#D8D3C6;
+    --white:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    line-height:1.6;
+  }
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px;}
+
+  /* Nav */
+  nav{
+    background:var(--navy);
+    color:var(--cream);
+    position:sticky;top:0;z-index:50;
+    border-bottom:3px solid var(--amber);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;}
+  .logo{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;display:flex;align-items:center;gap:8px;}
+  .logo span{background:var(--amber);color:var(--navy);padding:2px 8px;border-radius:3px;font-size:0.75rem;font-family:'IBM Plex Mono',monospace;}
+  .nav-links{display:flex;gap:28px;font-size:0.95rem;align-items:center;}
+  .nav-links a{opacity:0.85;transition:opacity .15s;}
+  .nav-links a:hover{opacity:1;}
+  .btn{
+    padding:9px 18px;border-radius:4px;font-size:0.9rem;font-weight:600;
+    border:1.5px solid transparent;cursor:pointer;transition:all .15s;
+    font-family:'Inter',sans-serif;display:inline-block;
+  }
+  .btn-outline{border-color:var(--cream);color:var(--cream);background:transparent;}
+  .btn-outline:hover{background:rgba(247,245,240,0.1);}
+  .btn-amber{background:var(--amber);color:var(--navy);}
+  .btn-amber:hover{background:#c98f00;}
+
+  /* Hero */
+  header.hero{
+    background:var(--navy);color:var(--cream);
+    padding:80px 0;
+    position:relative;overflow:hidden;
+  }
+  header.hero::after{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(0deg,transparent,transparent 27px,rgba(247,245,240,0.03) 28px);
+    pointer-events:none;
+  }
+  .hero-inner{position:relative;z-index:1;text-align:center;max-width:780px;margin:0 auto;}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;color:var(--amber);
+    font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;
+    margin-bottom:18px;
+  }
+  h1.headline{font-size:3rem;margin-bottom:20px;line-height:1.15;}
+  
+  /* FAQ Section */
+  section.faq-content{
+    padding:80px 0;
+  }
+  .faq-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:48px;
+  }
+  .faq-group h2{
+    font-size:1.8rem;
+    margin-bottom:24px;
+    padding-bottom:12px;
+    border-bottom:2px solid var(--ink);
+  }
+  .faq-item{
+    margin-bottom:32px;
+  }
+  .faq-item h3{
+    font-family:'Inter',sans-serif;
+    font-size:1.1rem;
+    margin-bottom:8px;
+    color:var(--teal);
+  }
+  .faq-item p{
+    font-size:0.95rem;
+    color:#3a362e;
+    line-height:1.6;
+  }
+
+  /* Footer */
+  footer{background:var(--navy);color:var(--cream);padding:44px 0 24px;}
+  footer .cols{display:flex;justify-content:space-between;flex-wrap:wrap;gap:30px;margin-bottom:30px;}
+  footer h4{font-family:'IBM Plex Mono',monospace;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--amber);margin-bottom:12px;}
+  footer p, footer a{font-size:0.88rem;opacity:0.8;}
+  footer .bottom{border-top:1px solid rgba(247,245,240,0.15);padding-top:18px;font-size:0.8rem;opacity:0.6;font-family:'IBM Plex Mono',monospace;}
+
+  @media(max-width:800px){
+    .faq-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="index.html" class="logo">APEX <span>JOBS</span></a>
+    <div class="nav-links">
+      <a href="index.html">Browse Jobs</a>
+      <a href="employers.html">For Employers</a>
+      <a href="about.html">About</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div class="eyebrow">Support & Information</div>
+    <h1 class="headline">Frequently Asked Questions</h1>
+  </div>
+</header>
+
+<section class="faq-content">
+  <div class="wrap faq-grid">
+    
+    <!-- Candidate FAQs -->
+    <div class="faq-group">
+      <h2>For Candidates</h2>
+      
+      <div class="faq-item">
+        <h3>Is APEX completely free for job seekers?</h3>
+        <p>Yes. Creating a profile, browsing jobs, and applying to positions is 100% free for all candidates. We only charge companies to post their open roles.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How do I know if a job listing is active?</h3>
+        <p>We enforce strict expiration policies. Jobs are automatically removed after 30 days unless explicitly renewed by the employer[cite: 1]. If you see it on the board, they are still accepting applications.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Can I filter for only remote jobs?</h3>
+        <p>Absolutely. You can use the quick filters on the homepage to instantly isolate fully remote positions, or visit our dedicated Work From Home portal for exclusively remote roles[cite: 2, 4].</p>
+      </div>
+      
+      <div class="faq-item">
+        <h3>Who sees my application data?</h3>
+        <p>Your data is only shared with the specific employer you submit an application to. We do not sell candidate data to third-party recruiters or agencies.</p>
+      </div>
+    </div>
+
+    <!-- Employer FAQs -->
+    <div class="faq-group">
+      <h2>For Employers</h2>
+      
+      <div class="faq-item">
+        <h3>How long does a job post stay active?</h3>
+        <p>A standard job post remains active and fully searchable for 30 days. You can choose to renew or pause your listing at any time from your employer dashboard.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Are salary ranges mandatory?</h3>
+        <p>While not strictly mandatory for every single role, we highly encourage salary transparency[cite: 1]. Listings with clear salary bands receive significantly higher application rates and better candidate alignment.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Does APEX integrate with my ATS?</h3>
+        <p>Yes. Customers on our Growth and Enterprise plans can integrate APEX applications directly into Greenhouse, Lever, and Workable workflows.</p>
+      </div>
+      
+      <div class="faq-item">
+        <h3>How do you verify candidates?</h3>
+        <p>Candidates are required to verify their email addresses upon signup. We also run automated checks to filter out bot submissions, ensuring the applications hitting your dashboard are from real professionals.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>APEX</h4>
+        <p style="max-width:260px;">A straightforward job board connecting people and companies without the clutter. Built as a focused, modern hiring platform.</p>
+      </div>
+    </div>
+    <div class="bottom">© 2026 APEX — A cleaner job portal for people who care about good work.</div>
+  </div>
+</footer>
+
+</body>
+</html>

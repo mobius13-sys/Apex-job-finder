@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX — Job Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2430;
+    --cream:#F7F5F0;
+    --amber:#E3A008;
+    --ink:#14181F;
+    --teal:#3D7068;
+    --red:#B5432A;
+    --line:#D8D3C6;
+    --white:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    line-height:1.5;
+  }
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px;}
+
+  /* Nav */
+  nav{
+    background:var(--navy);
+    color:var(--cream);
+    position:sticky;top:0;z-index:50;
+    border-bottom:3px solid var(--amber);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;}
+  .logo{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;display:flex;align-items:center;gap:8px;}
+  .logo span{background:var(--amber);color:var(--navy);padding:2px 8px;border-radius:3px;font-size:0.75rem;font-family:'IBM Plex Mono',monospace;}
+  .nav-links{display:flex;gap:28px;font-size:0.95rem;}
+  .nav-links a{opacity:0.85;transition:opacity .15s;}
+  .nav-links a:hover{opacity:1;}
+  .nav-btns{display:flex;gap:10px;}
+  .btn{
+    padding:9px 18px;border-radius:4px;font-size:0.9rem;font-weight:600;
+    border:1.5px solid transparent;cursor:pointer;transition:all .15s;
+    font-family:'Inter',sans-serif;
+  }
+  .btn-outline{border-color:var(--cream);color:var(--cream);background:transparent;}
+  .btn-outline:hover{background:rgba(247,245,240,0.1);}
+  .btn-amber{background:var(--amber);color:var(--navy);}
+  .btn-amber:hover{background:#c98f00;}
+  .btn-teal{background:var(--teal);color:var(--white);}
+  .btn-teal:hover{background:#31584f;}
+
+  /* Hero */
+  header.hero{
+    background:var(--navy);color:var(--cream);
+    padding:64px 0 90px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.hero::after{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(0deg,transparent,transparent 27px,rgba(247,245,240,0.03) 28px);
+    pointer-events:none;
+  }
+  .hero-inner{position:relative;z-index:1;}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;color:var(--amber);
+    font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  h1.headline{font-size:3rem;max-width:680px;margin-bottom:18px;}
+  .hero p.sub{max-width:520px;font-size:1.1rem;opacity:0.85;margin-bottom:36px;}
+
+  .search-box{
+    background:var(--cream);border-radius:6px;padding:8px;
+    display:flex;gap:8px;max-width:640px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.25);
+  }
+  .search-box input{
+    flex:1;border:none;background:transparent;padding:12px 14px;
+    font-size:0.95rem;color:var(--ink);font-family:'Inter',sans-serif;
+    outline:none;
+  }
+  .search-box select{
+    border:none;background:transparent;padding:12px 8px;font-size:0.9rem;
+    color:var(--ink);border-left:1px solid var(--line);font-family:'Inter',sans-serif;
+    outline:none;
+  }
+  .search-box button{
+    background:var(--amber);color:var(--navy);border:none;border-radius:4px;
+    padding:12px 24px;font-weight:700;cursor:pointer;font-size:0.9rem;
+  }
+
+  .stats-strip{
+    display:flex;gap:48px;margin-top:44px;flex-wrap:wrap;
+  }
+  .stat .num{font-family:'Fraunces',serif;font-size:1.8rem;color:var(--amber);}
+  .stat .label{font-size:0.8rem;opacity:0.75;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;}
+
+  /* Listings section */
+  section.listings{padding:64px 0 40px;}
+  .listings-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    margin-bottom:28px;border-bottom:2px solid var(--ink);padding-bottom:14px;
+    flex-wrap:wrap;gap:14px;
+  }
+  .listings-head h2{font-size:1.7rem;}
+  .filter-chips{display:flex;gap:8px;flex-wrap:wrap;}
+  .chip{
+    font-family:'IBM Plex Mono',monospace;font-size:0.78rem;
+    border:1.5px solid var(--ink);padding:6px 12px;border-radius:20px;
+    cursor:pointer;background:transparent;transition:all .15s;
+  }
+  .chip.active,.chip:hover{background:var(--ink);color:var(--cream);}
+
+  .job-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;}
+
+  .job-card{
+    background:var(--white);border:1.5px solid var(--line);border-radius:6px;
+    padding:22px;position:relative;transition:transform .15s, box-shadow .15s;
+    cursor:pointer;
+  }
+  .job-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(20,24,31,0.1);border-color:var(--ink);}
+  .job-card .ref{
+    position:absolute;top:18px;right:20px;font-family:'IBM Plex Mono',monospace;
+    font-size:0.72rem;color:#9a9484;
+  }
+  .job-card .badge{
+    display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;
+    background:var(--teal);color:var(--white);padding:3px 9px;border-radius:3px;
+    margin-bottom:12px;text-transform:uppercase;letter-spacing:0.04em;
+  }
+  .job-card .badge.remote{background:var(--amber);color:var(--navy);}
+  .job-card h3{font-size:1.15rem;margin-bottom:4px;padding-right:50px;}
+  .job-card .company{font-size:0.9rem;color:#585349;margin-bottom:14px;}
+  .job-card .meta{
+    display:flex;gap:14px;flex-wrap:wrap;font-size:0.8rem;color:#6b6659;
+    border-top:1px dashed var(--line);padding-top:12px;margin-top:4px;
+  }
+  .job-card .meta span{display:flex;align-items:center;gap:5px;}
+
+  .empty-state{
+    text-align:center;padding:60px 20px;color:#7a7466;
+    font-family:'IBM Plex Mono',monospace;font-size:0.9rem;
+    border:1.5px dashed var(--line);border-radius:6px;
+  }
+
+  /* Modal */
+  .overlay{
+    display:none;position:fixed;inset:0;background:rgba(20,24,31,0.6);
+    z-index:100;align-items:center;justify-content:center;padding:20px;
+  }
+  .overlay.open{display:flex;}
+  .modal{
+    background:var(--cream);border-radius:8px;max-width:520px;width:100%;
+    max-height:85vh;overflow-y:auto;padding:32px;position:relative;
+    border-top:5px solid var(--amber);
+  }
+  .modal .close{
+    position:absolute;top:18px;right:20px;background:none;border:none;
+    font-size:1.4rem;cursor:pointer;color:var(--ink);
+  }
+  .modal h3{font-size:1.4rem;margin-bottom:4px;}
+  .modal .company{color:#585349;margin-bottom:18px;font-size:0.95rem;}
+  .modal .desc{font-size:0.92rem;margin-bottom:20px;color:#3a362e;}
+  .modal .desc ul{margin:10px 0 10px 20px;}
+  .form-group{margin-bottom:14px;}
+  .form-group label{display:block;font-size:0.8rem;font-weight:600;margin-bottom:5px;font-family:'IBM Plex Mono',monospace;}
+  .form-group input,.form-group textarea{
+    width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:4px;
+    font-family:'Inter',sans-serif;font-size:0.9rem;background:var(--white);
+    outline:none;
+  }
+  .form-group input:focus,.form-group textarea:focus{border-color:var(--teal);}
+  .form-group textarea{resize:vertical;min-height:70px;}
+  .apply-msg{
+    display:none;background:#e9f2ee;border:1.5px solid var(--teal);color:#2a4f47;
+    padding:14px;border-radius:5px;font-size:0.88rem;margin-top:14px;
+  }
+  .apply-msg.show{display:block;}
+
+  /* Footer */
+  footer{background:var(--navy);color:var(--cream);margin-top:70px;padding:44px 0 24px;}
+  footer .cols{display:flex;justify-content:space-between;flex-wrap:wrap;gap:30px;margin-bottom:30px;}
+  footer h4{font-family:'IBM Plex Mono',monospace;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--amber);margin-bottom:12px;}
+  footer p, footer a{font-size:0.88rem;opacity:0.8;}
+  footer .bottom{border-top:1px solid rgba(247,245,240,0.15);padding-top:18px;font-size:0.8rem;opacity:0.6;font-family:'IBM Plex Mono',monospace;}
+
+  :focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
+
+  @media(max-width:700px){
+    .nav-links{display:none;}
+    h1.headline{font-size:2.1rem;}
+    .search-box{flex-direction:column;}
+    .search-box select{border-left:none;border-top:1px solid var(--line);}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">APEX <span>JOBS</span></div>
+    <div class="nav-links">
+  <a href="#listings">Browse Jobs</a>
+  <a href="work-from-home.html" >Work From Home</a>
+  <a href="faq.html">Faq</a>
+  <a href="#about">About</a>
+</div>
+    
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div class="eyebrow">Ref. No. WB-2026 — Now Listing</div>
+    <h1 class="headline">Work worth showing up for.</h1>
+    <p class="sub">Search real openings from real companies. No noise, no recycled listings — just roles that are actually hiring right now.</p>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Job title or keyword (e.g. Frontend Developer)">
+      <select id="categorySelect">
+        <option value="all">All categories</option>
+        <option value="engineering">Engineering</option>
+        <option value="design">Design</option>
+        <option value="marketing">Marketing</option>
+        <option value="sales">Sales</option>
+        <option value="support">Customer Support</option>
+      </select>
+      <button onclick="filterJobs()">Search</button>
+    </div>
+
+    <div class="stats-strip">
+      <div class="stat"><div class="num" id="statJobs">0</div><div class="label">Open Roles</div></div>
+      <div class="stat"><div class="num">240+</div><div class="label">Companies</div></div>
+      <div class="stat"><div class="num">18k</div><div class="label">Candidates Placed</div></div>
+    </div>
+  </div>
+</header>
+
+<section class="listings wrap" id="listings">
+  <div class="listings-head">
+    <h2>Open Positions</h2>
+    <div class="filter-chips" id="chipRow">
+      <button class="chip active" data-filter="all">All</button>
+      <button class="chip" data-filter="remote">Remote</button>
+      <button class="chip" data-filter="full-time">Full-time</button>
+      <button class="chip" data-filter="internship">Internship</button>
+    </div>
+  </div>
+
+  <div class="job-grid" id="jobGrid"></div>
+  <div class="empty-state" id="emptyState" style="display:none;">No listings match your search. Try clearing filters.</div>
+</section>
+
+<footer id="about">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>APEX</h4>
+        <p style="max-width:260px;">A straightforward job board built as a full-stack learning project — connecting job seekers and employers without the clutter.</p>
+      </div>
+      <div>
+        <h4>For Candidates</h4>
+        <p><a href="#listings">Browse jobs</a></p>
+      </div>
+      <div>
+        <h4>For Employers</h4>
+        <p><a href="#" onclick="openEmployerInfo();return false;">Post a job</a></p>
+      </div>
+    </div>
+    <div class="bottom wrap" style="padding:0;">© 2026 APEX — Built as a demo job portal front end.</div>
+  </div>
+</footer>
+
+<!-- Job Details / Apply Modal -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <button class="close" onclick="closeModal()">&times;</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+  // ---------- Sample job data (expanded) ----------
+  const jobs = [
+    {
+      id: "WB-101", title: "Frontend Developer", company: "Northlane Tech",
+      category: "engineering", type: "full-time", remote: true,
+      location: "Remote", salary: "₹6–9 LPA",
+      desc: "Build and maintain responsive web interfaces using JavaScript and modern frameworks. Work closely with designers to turn mockups into working product."
+    },
+    {
+      id: "WB-102", title: "Backend Developer (Node.js)", company: "Harborline Systems",
+      category: "engineering", type: "full-time", remote: false,
+      location: "Chennai, IN", salary: "₹7–11 LPA",
+      desc: "Design REST APIs, work with MongoDB, and own backend services end to end. Experience with Express.js preferred."
+    },
+    {
+      id: "WB-103", title: "UI/UX Design Intern", category: "design",
+      company: "Studio Pinecone", type: "internship", remote: true,
+      location: "Remote", salary: "₹15,000/mo",
+      desc: "Assist the design team with wireframes, prototypes, and user research for an early-stage product team."
+    },
+    {
+      id: "WB-104", title: "Digital Marketing Executive", category: "marketing",
+      company: "Verona Retail Co.", type: "full-time", remote: false,
+      location: "Bengaluru, IN", salary: "₹4–6 LPA",
+      desc: "Plan and run performance marketing campaigns across social and search. Report on ROI weekly."
+    },
+    {
+      id: "WB-105", title: "Sales Development Representative", category: "sales",
+      company: "Fieldstone SaaS", type: "full-time", remote: true,
+      location: "Remote", salary: "₹5–7 LPA",
+      desc: "Generate and qualify leads for the enterprise sales team. Great entry point into B2B SaaS sales."
+    },
+    {
+      id: "WB-106", title: "Customer Support Associate", category: "support",
+      company: "Anchorpoint Labs", type: "full-time", remote: false,
+      location: "Hyderabad, IN", salary: "₹3.5–5 LPA",
+      desc: "Handle inbound customer queries over chat and email, escalate technical issues, maintain a high CSAT score."
+    },
+    {
+      id: "WB-107", title: "Full Stack Developer Intern", category: "engineering",
+      company: "Northlane Tech", type: "internship", remote: true,
+      location: "Remote", salary: "₹12,000/mo",
+      desc: "Work across the stack — HTML/CSS/JS frontend, Node.js backend, MongoDB — under the mentorship of senior engineers."
+    },
+    {
+      id: "WB-108", title: "Product Designer", category: "design",
+      company: "Harborline Systems", type: "full-time", remote: false,
+      location: "Chennai, IN", salary: "₹8–12 LPA",
+      desc: "Own the design of core product flows from research through to high-fidelity handoff."
+    },
+    // ---- NEW JOBS ----
+    {
+      id: "WB-109", title: "React Native Developer", company: "AppForge Labs",
+      category: "engineering", type: "full-time", remote: true,
+      location: "Remote", salary: "₹8–13 LPA",
+      desc: "Build and ship cross-platform mobile apps using React Native. Collaborate with product and design teams on feature delivery."
+    },
+    {
+      id: "WB-110", title: "DevOps Engineer", company: "Cloudspan Technologies",
+      category: "engineering", type: "full-time", remote: false,
+      location: "Pune, IN", salary: "₹10–15 LPA",
+      desc: "Manage CI/CD pipelines, Kubernetes clusters, and cloud infrastructure on AWS. Improve deployment reliability and monitoring."
+    },
+    {
+      id: "WB-111", title: "Content Marketing Specialist", company: "Brightline Media",
+      category: "marketing", type: "full-time", remote: true,
+      location: "Remote", salary: "₹4.5–7 LPA",
+      desc: "Create high-performing content for blogs, newsletters, and social channels. Track engagement and iterate based on data."
+    },
+    {
+      id: "WB-112", title: "Graphic Design Intern", company: "Studio Pinecone",
+      category: "design", type: "internship", remote: false,
+      location: "Mumbai, IN", salary: "₹12,000/mo",
+      desc: "Support the design team with social assets, pitch decks, and marketing collateral. Opportunity to build a strong portfolio."
+    },
+    {
+      id: "WB-113", title: "Account Executive", company: "Fieldstone SaaS",
+      category: "sales", type: "full-time", remote: true,
+      location: "Remote", salary: "₹7–12 LPA + variable",
+      desc: "Own the full sales cycle for mid-market accounts. Meet or exceed quarterly revenue targets while maintaining strong client relationships."
+    },
+    {
+      id: "WB-114", title: "Technical Support Engineer", company: "Anchorpoint Labs",
+      category: "support", type: "full-time", remote: true,
+      location: "Remote", salary: "₹5–8 LPA",
+      desc: "Troubleshoot product issues for enterprise customers, write knowledge-base articles, and collaborate with engineering on bug reports."
+    },
+    {
+      id: "WB-115", title: "QA Automation Engineer", company: "Northlane Tech",
+      category: "engineering", type: "full-time", remote: false,
+      location: "Bengaluru, IN", salary: "₹7–11 LPA",
+      desc: "Design and maintain automated test suites using Selenium / Playwright. Improve test coverage and reduce production defects."
+    },
+    {
+      id: "WB-116", title: "Social Media Manager", company: "Verona Retail Co.",
+      category: "marketing", type: "full-time", remote: false,
+      location: "Delhi NCR, IN", salary: "₹5–8 LPA",
+      desc: "Own the brand’s social presence across Instagram, LinkedIn, and YouTube. Plan campaigns, create content calendars, and report on growth metrics."
+    }
+  ];
+
+  let activeChip = "all";
+
+  function renderJobs(list) {
+    const grid = document.getElementById('jobGrid');
+    const empty = document.getElementById('emptyState');
+    grid.innerHTML = "";
+
+    if (list.length === 0) {
+      empty.style.display = "block";
+      return;
+    }
+    empty.style.display = "none";
+
+    list.forEach(job => {
+      const card = document.createElement('div');
+      card.className = 'job-card';
+      card.onclick = () => openModal(job.id);
+      card.innerHTML = `
+        <div class="ref mono">${job.id}</div>
+        <span class="badge ${job.remote ? 'remote' : ''}">${job.remote ? 'Remote' : job.type}</span>
+        <h3>${job.title}</h3>
+        <div class="company">${job.company} · ${job.location}</div>
+        <div class="meta">
+          <span>💰 ${job.salary}</span>
+          <span>🗂 ${capitalize(job.category)}</span>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function filterJobs() {
+    const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+    const category = document.getElementById('categorySelect').value;
+
+    let result = jobs.filter(job => {
+      const matchesKeyword = job.title.toLowerCase().includes(keyword) || job.company.toLowerCase().includes(keyword);
+      const matchesCategory = category === "all" || job.category === category;
+      const matchesChip =
+        activeChip === "all" ? true :
+        activeChip === "remote" ? job.remote :
+        activeChip === "full-time" ? job.type === "full-time" :
+        activeChip === "internship" ? job.type === "internship" : true;
+      return matchesKeyword && matchesCategory && matchesChip;
+    });
+
+    renderJobs(result);
+  }
+
+  document.getElementById('searchInput').addEventListener('input', filterJobs);
+  document.getElementById('categorySelect').addEventListener('change', filterJobs);
+
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeChip = chip.dataset.filter;
+      filterJobs();
+    });
+  });
+
+  // ---------- Modal ----------
+  function openModal(jobId) {
+    const job = jobs.find(j => j.id === jobId);
+    if (!job) return;
+
+    document.getElementById('modalBody').innerHTML = `
+      <div class="mono" style="font-size:0.75rem;color:#9a9484;margin-bottom:8px;">${job.id}</div>
+      <h3>${job.title}</h3>
+      <div class="company">${job.company} · ${job.location} · ${job.salary}</div>
+      <div class="desc">
+        <p>${job.desc}</p>
+      </div>
+      <form id="applyForm" onsubmit="submitApplication(event)">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" required placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" required placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label>Why are you a fit? (optional)</label>
+          <textarea placeholder="A couple of lines about your relevant experience..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-teal" style="width:100%;">Submit Application</button>
+      </form>
+      <div class="apply-msg" id="applyMsg">✓ Application submitted for <strong>${job.title}</strong>. In a connected version, this would be saved to your database and the employer would see it on their dashboard.</div>
+    `;
+    document.getElementById('overlay').classList.add('open');
+  }
+
+  function submitApplication(e) {
+    e.preventDefault();
+    document.getElementById('applyForm').style.display = 'none';
+    document.getElementById('applyMsg').classList.add('show');
+  }
+
+  function closeModal() {
+    document.getElementById('overlay').classList.remove('open');
+  }
+
+  document.getElementById('overlay').addEventListener('click', (e) => {
+    if (e.target.id === 'overlay') closeModal();
+  });
+
+  function openEmployerInfo() {
+    alert('This would open an employer sign-up / job-posting flow — wire it to your backend\'s POST /api/jobs route.');
+  }
+
+  // ---------- Init ----------
+  document.getElementById('statJobs').textContent = jobs.length;
+  renderJobs(jobs);
+</script>
+
+</body>
+</html>
